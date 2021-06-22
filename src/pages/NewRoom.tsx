@@ -1,16 +1,14 @@
-import { useContext } from 'react';
-import {Link} from 'react-router-dom'
-import { AuthContext } from '../App';
+import { Link } from 'react-router-dom';
 
 import illustrationImage from '../assets/images/illustration.svg';
 import logoImage from '../assets/images/logo.svg';
 
 import Button from '../components/Button';
+import { useAuth } from '../hooks/useAuth';
 import '../styles/auth.scss';
 
-
 const NewRoom: React.FC = () => {
-  const {user} = useContext(AuthContext);
+  const { user } = useAuth();
 
   return (
     <div id="page-auth">
@@ -25,10 +23,7 @@ const NewRoom: React.FC = () => {
           <h1>{user?.name}</h1>
           <h2>Criar uma nova sala</h2>
           <form>
-            <input 
-              type="text"
-              placeholder="Nome da sala"
-            />
+            <input type="text" placeholder="Nome da sala" />
             <Button type="submit">Criar a sala</Button>
           </form>
           <p>
@@ -38,6 +33,6 @@ const NewRoom: React.FC = () => {
       </main>
     </div>
   );
-}
+};
 
 export default NewRoom;
