@@ -1,15 +1,23 @@
+import { useParams } from 'react-router-dom';
 import logoImage from '../assets/images/logo.svg';
 import Button from '../components/Button';
+import RoomCode from '../components/RoomCode';
 
 import '../styles/room.scss';
 
+type RoomParms = {
+  id: string;
+};
+
 const Room: React.FC = () => {
+  const { id } = useParams<RoomParms>();
+
   return (
     <div id="page-room">
       <header>
         <div className="content">
           <img src={logoImage} alt="logo" />
-          <div>codigo</div>
+          <RoomCode code={id} />
         </div>
       </header>
 
