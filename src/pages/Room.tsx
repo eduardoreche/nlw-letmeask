@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FormEvent, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import logoImage from '../assets/images/logo.svg';
@@ -12,10 +13,55 @@ type RoomParms = {
   id: string;
 };
 
+type FirebaseQuestions = Record<
+  string,
+  {
+    author: {
+      name: string;
+      avatar: string;
+    };
+    content: string;
+    isHighlighted: boolean;
+    isAnswered: boolean;
+  }
+>;
+
+type Question = {
+  id: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
+  content: string;
+  isHighlighted: boolean;
+  isAnswered: boolean;
+};
+
 const Room: React.FC = () => {
   const { user } = useAuth();
   const { id: roomId } = useParams<RoomParms>();
   const [newQuestion, setNewQuestion] = useState('');
+  const [questions, setQuestinos] = useState<Question[]>([]);
+  const [title, setTitle] = useState('');
+
+  useEffect(() => {
+    const roomRef = database.ref(`rooms/${roomId}`);
+
+    roomRef.on('value', (room) => {
+      const databaseRoom = room.val();
+      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
+      const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => ({
+        id: key,
+        content: value.content,
+        author: value.author,
+        isHighlighted: value.isHighlighted,
+        isAnswered: value.isAnswered,
+      }));
+
+      setQuestinos(parsedQuestions);
+      setTitle(databaseRoom.title);
+    });
+  }, [roomId]);
 
   const handleSendQuestion = async (event: FormEvent) => {
     event.preventDefault();
@@ -50,8 +96,8 @@ const Room: React.FC = () => {
 
       <main className="content">
         <div className="room-title">
-          <h1>Sala React</h1>
-          <span>4 perguntas</span>
+          <h1>Sala {title}</h1>
+          {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
         </div>
 
         <form onSubmit={handleSendQuestion}>
@@ -76,6 +122,8 @@ const Room: React.FC = () => {
             </Button>
           </div>
         </form>
+
+        {JSON.stringify(questions)}
       </main>
     </div>
   );
