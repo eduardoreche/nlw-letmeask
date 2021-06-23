@@ -59,21 +59,37 @@
         justify-content: space-between;
         align-items: center;
         margin-top: 16px;
-      }
 
-      span {
-        font-size: 14px;
-        color: #737330;
-        font-weight: 500;
+        .user-info {
+          display: flex;
+          align-items: center;
+          img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
 
-        button {
-          background: transparent;
-          border: 0;
-          color: #835afd;
-          text-decoration: underline;
+            > span {
+              color: #29292e;
+              font-weight: 500;
+            }
+          }
+        }
+
+        span {
           font-size: 14px;
+          color: #737330;
           font-weight: 500;
-          cursor: pointer;
+
+          button {
+            background: transparent;
+            border: 0;
+            color: #835afd;
+            text-decoration: underline;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+          }
         }
       }
     }
