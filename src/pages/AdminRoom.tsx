@@ -6,6 +6,8 @@ import RoomCode from '../components/RoomCode';
 import useRoom from '../hooks/useRoom';
 
 import deleteImage from '../assets/images/delete.svg';
+import checkImage from '../assets/images/check.svg';
+import answerImage from '../assets/images/answer.svg';
 
 import '../styles/room.scss';
 import { database } from '../services/firebase';
@@ -23,6 +25,18 @@ const AdminRoom: React.FC = () => {
     if (window.confirm('Are you you want to delete this question?')) {
       await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
     }
+  };
+
+  const handleHighlightedQuestion = async (questionId: string) => {
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+      isHighlighted: true,
+    });
+  };
+
+  const handleCheckQuestionAnswered = async (questionId: string) => {
+    await database.ref(`rooms/${roomId}/questions/${questionId}`).update({
+      isAnswered: true,
+    });
   };
 
   const handleEndRoom = async () => {
@@ -56,6 +70,12 @@ const AdminRoom: React.FC = () => {
         <div className="question-list">
           {questions.map((question) => (
             <Question key={question.id} content={question.content} author={question.author}>
+              <button onClick={() => handleCheckQuestionAnswered(question.id)}>
+                <img src={checkImage} alt="Check as answered" />
+              </button>
+              <button onClick={() => handleHighlightedQuestion(question.id)}>
+                <img src={answerImage} alt="Highlight question" />
+              </button>
               <button onClick={() => handleDeleteQuestion(question.id)}>
                 <img src={deleteImage} alt="Delete question" />
               </button>
