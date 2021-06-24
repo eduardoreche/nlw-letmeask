@@ -69,13 +69,23 @@ const AdminRoom: React.FC = () => {
 
         <div className="question-list">
           {questions.map((question) => (
-            <Question key={question.id} content={question.content} author={question.author}>
-              <button onClick={() => handleCheckQuestionAnswered(question.id)}>
-                <img src={checkImage} alt="Check as answered" />
-              </button>
-              <button onClick={() => handleHighlightedQuestion(question.id)}>
-                <img src={answerImage} alt="Highlight question" />
-              </button>
+            <Question
+              key={question.id}
+              content={question.content}
+              author={question.author}
+              isAnswered={question.isAnswered}
+              isHighlighted={question.isHighlighted}
+            >
+              {!question.isAnswered && (
+                <>
+                  <button onClick={() => handleCheckQuestionAnswered(question.id)}>
+                    <img src={checkImage} alt="Check as answered" />
+                  </button>
+                  <button onClick={() => handleHighlightedQuestion(question.id)}>
+                    <img src={answerImage} alt="Highlight question" />
+                  </button>
+                </>
+              )}
               <button onClick={() => handleDeleteQuestion(question.id)}>
                 <img src={deleteImage} alt="Delete question" />
               </button>
