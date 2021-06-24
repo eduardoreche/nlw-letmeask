@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import logoImage from '../assets/images/logo.svg';
 import Button from '../components/Button';
 import Question from '../components/Question';
@@ -15,6 +15,7 @@ type RoomParms = {
 };
 
 const AdminRoom: React.FC = () => {
+  const history = useHistory();
   const { id: roomId } = useParams<RoomParms>();
   const { title, questions } = useRoom(roomId);
 
@@ -24,6 +25,14 @@ const AdminRoom: React.FC = () => {
     }
   };
 
+  const handleEndRoom = async () => {
+    await database.ref(`rooms/${roomId}`).update({
+      closedAt: new Date(),
+    });
+
+    history.push('/');
+  };
+
   return (
     <div id="page-room">
       <header>
@@ -31,7 +40,9 @@ const AdminRoom: React.FC = () => {
           <img src={logoImage} alt="logo" />
           <div>
             <RoomCode code={roomId} />
-            <Button isOutlined>Encerrar Sala</Button>
+            <Button isOutlined onClick={handleEndRoom}>
+              Encerrar Sala
+            </Button>
           </div>
         </div>
       </header>
